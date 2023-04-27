@@ -20,7 +20,19 @@
 
 - name: Include version-specific variables for Debian.
   include_vars: "{{ ansible_distribution | title }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
-  when: ansible_os_family == 'Debian'
+  when: ansible_os_family == 'Debian' and ansible_distribution != 'Linux Mint'
+
+- name: Include OS variables for Linux Mint
+  when: ansible_distribution == 'Linux Mint'
+  block:
+  - name: Include version-specific variables for Linux Mint 20
+    ansible.builtin.include_vars: "Ubuntu-20.yml"
+    when: ansible_distribution_version.split('.')[0] == '20'
+
+  - name: Include version-specific variables for Linux Mint 21
+    ansible.builtin.include_vars: "Ubuntu-22.yml"
+    when: ansible_distribution_version.split('.')[0] == '21'
+
 
 - name: Define java_packages.
   set_fact:
