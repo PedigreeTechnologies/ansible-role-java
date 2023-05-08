@@ -12,5 +12,7 @@
 
 - name: Ensure Java is installed.
   apt:
-    name: "{{ java_packages }}"
+    deb: "{{ item }}"
     state: present
+  with_items:
+    - "{{ java_packages }}"
